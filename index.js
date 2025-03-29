@@ -34,7 +34,7 @@ app.post("/screenshot", async (req, res) => {
 
     const page = await browser.newPage();
     console.log("🌐 Navigating to:", website_url);
-    await page.goto(website_url, { waitUntil: "networkidle2", timeout: 30000 });
+    await page.goto(website_url, { waitUntil: "domcontentloaded", timeout: 60000 });
 
     console.log("📸 Taking screenshot...");
     const screenshotBuffer = await page.screenshot({
