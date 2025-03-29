@@ -13,6 +13,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY
 );
 
+app.get("/", (req, res) => {
+  console.log("👋 Root route hit");
+  res.send("Hello from Puppeteer screenshot service!");
+});
+
 app.post("/screenshot", async (req, res) => {
   console.log("🔥 Screenshot route hit");
 
@@ -75,9 +80,10 @@ app.post("/screenshot", async (req, res) => {
     console.log("✅ Screenshot saved to DB and Supabase Storage");
     res.json({ success: true, screenshot_url: publicData.publicUrl });
   } catch (err) {
-    console.error("❌ Screenshot error:", err);
-    res.status(500).json({ error: err.message || "Unknown error" });
-  }
+  console.error("❌ Screenshot error:", err); // Already present
+  console.error("📛 Full error object:", JSON.stringify(err, null, 2)); // Add this
+  res.status(500).json({ error: err?.message || "Unknown error" });
+}
 });
 
 const port = process.env.PORT || 3000;
