@@ -37,7 +37,14 @@ app.post("/screenshot", async (req, res) => {
     await page.goto(website_url, { waitUntil: "networkidle2", timeout: 30000 });
 
     console.log("📸 Taking screenshot...");
-    const screenshotBuffer = await page.screenshot({ fullPage: true });
+    const screenshotBuffer = await page.screenshot({
+      fullPage: false, // only captures visible area
+      clip: await page.evaluate(() => {
+        const { innerWidth: width, innerHeight: height } = window;
+        return { x: 0, y: 0, width, height };
+      }),
+    });
+    
     await browser.close();
     console.log("✅ Screenshot taken, browser closed");
 
